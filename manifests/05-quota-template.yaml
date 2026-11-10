@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: 102783255-quota
+  namespace: 102783255-hpa
+  labels:
+    project: hpa-under-load
+    student-id: "102783255"
+spec:
+  hard:
+    pods: "__QUOTA_PODS__"
+    requests.cpu: "__QUOTA_CPU__"
