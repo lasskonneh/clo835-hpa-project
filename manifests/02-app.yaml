@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 102783255-burn
+  namespace: 102783255-hpa
+  labels:
+    app: 102783255-burn
+    student-id: "102783255"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: 102783255-burn
+  template:
+    metadata:
+      labels:
+        app: 102783255-burn
+        student-id: "102783255"
+    spec:
+      containers:
+        - name: burn
+          image: lasskonneh/102783255-burn:v1
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: STUDENT_ID
+              value: "102783255"
+            - name: APP_MODE
+              valueFrom:
+                secretKeyRef:
+                  name: 102783255-app-secret
+                  key: APP_MODE
+          resources:
+            requests:
+              cpu: "200m"
+            limits:
+              cpu: "500m"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
